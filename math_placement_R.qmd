@@ -1,0 +1,70 @@
+---
+title: "Math Scores"
+author: "Wellsin Price"
+format: html
+editor: visual
+---
+
+# Math Placement Scores
+## Exploratory Analysis of Scores
+## Load Libraries
+```{r}
+# Load libraries tidyverse for data science tools and Stat2Data for dataset
+library(tidyverse)
+library(Stat2Data)
+```
+## Load Data
+```{r}
+# Load dataset from the library Stat2Data
+data("MathPlacement")
+glimpse(MathPlacement)
+```
+## Explore data
+```{r}
+# Select PlcmtScore and Grade from original dataset into variable
+plcmtScore_grade_correlation <- MathPlacement %>%
+  select(PlcmtScore, Grade)
+glimpse(plcmtScore_grade_correlation)
+# Perform regression analysis of the new data variable
+regression_pScoreGrade_corr <- lm(PlcmtScore ~ Grade, data = plcmtScore_grade_correlation)
+# Get regression table
+get_regression_table(regression_pScoreGrade_corr)
+```
+```{r}
+# Select Gender and PlcmtScore
+plcmtScore_gender_correlation <- MathPlacement %>%
+  select(PlcmtScore, Gender)
+glimpse(plcmtScore_gender_correlation)
+# Perform regression analysis of the selected two columns
+regression_pScoreGender_corr <- lm(PlcmtScore ~ Gender, data = plcmtScore_gender_correlation)
+# Get regression table
+get_regression_table(regression_pScoreGender_corr)
+```
+```{r}
+# Compare placement score to course success
+plcmtScore_Success <- MathPlacement %>%
+  select(PlcmtScore, CourseSuccess)
+glimpse(plcmtScore_Success)
+# Perform regression analysis
+regression_pScoreSuccess <- lm(PlcmtScore ~ CourseSuccess, data = plcmtScore_Success)
+# Get regression table
+get_regression_table(regression_pScoreSuccess)
+```
+
+# Visualize data
+```{r}
+# Visualize placement score and grade correlation
+ggplot(data = plcmtScore_grade_correlation, aes(y = Grade, x = PlcmtScore)) +
+  geom_point() + 
+  geom_smooth(method = "lm", se = FALSE)
+# Visualize placement score and gender correlation
+ggplot(data = plcmtScore_gender_correlation, aes(y = Gender, x = PlcmtScore)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+```
+```{r}
+ggplot(data = plcmtScore_Success, aes(y = CourseSuccess, x = PlcmtScore)) + 
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+```
+
